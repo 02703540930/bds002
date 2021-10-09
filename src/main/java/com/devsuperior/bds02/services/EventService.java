@@ -3,6 +3,8 @@ package com.devsuperior.bds02.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -64,12 +66,8 @@ public class EventService {
 			copyDtotoEntity(dto, entity);
 			entity = repository.save(entity);
 			return new EventDTO(entity);
-		} catch (EmptyResultDataAccessException e) {
-			throw new ResourceNotFoundException("Id not found " + id); // criada no services.exceptions e no controller.exceptions handlers
-		} catch (DataIntegrityViolationException e) {
-			throw new DatabaseException("Integrity Violation"); // criada no services.exceptions e no controller.exceptions handlers
-		} catch (BadRequestException e) {
-			throw new BadRequestException("Bad Request");
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Id not found " + id);
 		}
 	}
 
